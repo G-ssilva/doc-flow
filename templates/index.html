@@ -10,17 +10,25 @@
 
 	<form method="POST" enctype="multipart/form-data">
 		<div class="mb-3">
-			<label for="pdf" class="form-label">Enviar PDF</label>
-			<input type="file" class="form-control" id="pdf" name="pdf" required>
+			<label for="pdfs" class="form-label">Enviar PDFs</label>
+			<input type="file" class="form-control" id="pdfs" name="pdfs" multiple required>
 		</div>
-		<button type="submit" class="btn btn-primary">Gerar DOCX</button>
+		<button type="submit" class="btn btn-primary">Gerar DOCXs</button>
 	</form>
 
-	{% if download_link %}
+	{% if download_links %}
 	<div class="mt-3">
-		<a href="{{ url_for('download_file', filename=download_link) }}" class="btn btn-success">
-			Baixar Documento Gerado
-		</a>
+		<h4>Arquivos gerados:</h4>
+		<ul class="list-group">
+			{% for arquivo in download_links %}
+			<li class="list-group-item">
+				{{ arquivo }}
+				<a href="{{ url_for('download_file', filename=arquivo) }}" class="btn btn-success btn-sm float-end">
+					Baixar
+				</a>
+			</li>
+			{% endfor %}
+		</ul>
 	</div>
 	{% endif %}
 </body>

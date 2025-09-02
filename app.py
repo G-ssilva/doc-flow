@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file, redirect, url_for
+from flask import Flask, render_template, request, send_file
 from main import gerar_documento
 import os
 
@@ -12,17 +12,19 @@ os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    download_link = None
+    download_links = []
 
     if request.method == "POST":
-        pdf_file = request.files["pdf"]
-        caminho_pdf = os.path.join(UPLOAD_FOLDER, pdf_file.filename)
-        pdf_file.save(caminho_pdf)
+        pdf_files = request.files.getlist("pdfs")
 
-        saida_docx = gerar_documento(caminho_pdf, output_dir=OUTPUT_FOLDER)
-        download_link = os.path.basename(saida_docx)
+        for pdf_file in pdf_files:
+            caminho_pdf = os.path.join(UPLOAD_FOLDER, pdf_file.filename)
+            pdf_file.save(caminho_pdf)
 
-    return render_template("index.html", download_link=download_link)
+            saida_docx = gerar_documento(caminho_pdf, output_dir=OUTPUT_FOLDER)
+            download_links.append(os.path.basename(saida_docx))
+
+    return render_template("index.html", download_links=download_links)
 
 
 @app.route("/download/<filename>")

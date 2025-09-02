@@ -208,3 +208,10 @@ __marimo__/
 
 # JetBrains IDEs
 .idea
+
+# Pastas de trabalho
+saida
+uploads
+
+# Arquivos do sistema
+modelo.docx
